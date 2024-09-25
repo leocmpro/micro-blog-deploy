@@ -1,0 +1,25 @@
+services:
+  mongodb:
+    image: mongo:7
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      TZ: "America/Bogota"
+      MONGO_INITDB_ROOT_USERNAME: "${MONGO_ROOT_USER}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGO_ROOT_PASSWORD}"
+    volumes:
+      - ./mongodb-data:/data/db
+
+  api:
+    image: node/api
+    build:
+      context: micro-blog
+      dockerfile: ./Dockerfile
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      TZ: "America/Bogota"
+      MONGO_URI: "${MONGO_URI}"
+      JWT_SECRET_KEY: "${JWT_SECRET_KEY}"
